@@ -212,8 +212,6 @@ def create_app() -> FastAPI:
             h, w = img.shape[:2]
 
             height, width = img.shape[:2]
-            if width > settings.MAX_IMAGE_DIMENSION or height > settings.MAX_IMAGE_DIMENSION:
-                raise HTTPException(status_code=400, detail=f"Image too large")
 
             # Determine blur types using stable comparison
             detection_infos = []
