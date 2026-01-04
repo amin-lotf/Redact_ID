@@ -201,7 +201,7 @@ def create_app() -> FastAPI:
 
             if file_size == 0:
                 raise HTTPException(status_code=400, detail="Empty file")
-            if file_size > MAX_FILE_SIZE:
+            if file_size > settings.MAX_FILE_SIZE:
                 raise HTTPException(status_code=400, detail=f"File too large")
 
             # Run YOLO detection ONCE

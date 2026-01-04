@@ -3,7 +3,6 @@
 import io
 from unittest.mock import Mock, patch
 
-import numpy as np
 import pytest
 from fastapi.testclient import TestClient
 from PIL import Image
@@ -42,7 +41,7 @@ def client(mock_model, tmp_path):
 
     # Patch YOLO to return our mock
     with patch("src.redact_id.api.YOLO", return_value=mock_model):
-        app = create_app(model_path)
+        app = create_app()
         with TestClient(app) as test_client:
             yield test_client
 
@@ -177,7 +176,6 @@ class TestAsyncBehavior:
     @pytest.mark.asyncio
     async def test_concurrent_requests(self, client, test_image_bytes):
         """Test handling concurrent requests."""
-        import asyncio
         from concurrent.futures import ThreadPoolExecutor
 
         def make_request():
@@ -205,11 +203,10 @@ class TestErrorHandling:
 
     def test_model_not_loaded(self, tmp_path):
         """Test behavior when model fails to load."""
-        model_path = str(tmp_path / "nonexistent.pt")
 
         with patch("src.redact_id.api.YOLO", side_effect=Exception("Model load failed")):
             with pytest.raises(Exception, match="Model load failed"):
-                app = create_app(model_path)
+                app = create_app()
                 # Trigger lifespan startup which should raise the exception
                 with TestClient(app):
                     pass
