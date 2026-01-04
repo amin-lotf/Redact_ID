@@ -1,3 +1,4 @@
+![Docker Pulls](https://img.shields.io/docker/pulls/aminook/redact-id)
 # RedactID
 Production-ready document redaction API for sensitive IDs and personal data
 
