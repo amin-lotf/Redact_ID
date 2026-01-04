@@ -141,10 +141,10 @@ curl -X POST "http://localhost:8000/redact/json" \
 uv sync
 
 # Set model path (your trained YOLO weights)
-export MODEL_PATH=path/to/best.pt
-
+export MODEL_PATH=path/to/trained_model.pt
+export REDACTION_POLICY_PATH=/path/to/redaction_policy.json
 # Run server
-uv run python -m src.redact_id.main
+redact_id
 ```
 
 **Docs:** OpenAPI UI at http://localhost:8000/docs
