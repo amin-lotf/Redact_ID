@@ -1,0 +1,15 @@
+{
+  "class_names": {
+    "0": "Address",
+    "1": "Birth Date",
+    "2": "ID Number",
+    "3": "Long Passport Number",
+    "4": "NHI ID",
+    "5": "Name",
+    "6": "Others",
+    "7": "Passport Number",
+    "8": "Passport Number Vertical"
+  },
+  "full_blur_classes": [0, 3, 6,8],
+  "partial_blur_classes": [2, 4, 7]
+}
