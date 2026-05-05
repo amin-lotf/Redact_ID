@@ -1,0 +1,16 @@
+services:
+  app:
+    build: .
+    image: aminook/redact-id:0.2.0
+    container_name: redact_id_app
+    env_file:
+      - .env.docker
+    environment:
+      MODEL_PATH: /model/trained_model.pt
+      REDACTION_POLICY_PATH: /policy/redaction_policy.json
+    ports:
+      - "${API_PORT:-8000}:8000"
+    volumes:
+      - ./model:/model
+      - ./policy:/policy
+

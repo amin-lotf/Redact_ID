@@ -1,3 +1,7 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
 name = "redact_id"
 version = "0.1.0"
@@ -40,9 +44,6 @@ training = [
     "pytesseract>=0.3.13",
 ]
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/redact_id"]
@@ -69,6 +70,3 @@ exclude_lines = [
     "if __name__ == .__main__.:",
 ]
 
-
-[project.scripts]
-redact_id = "redact_id.main:main"
