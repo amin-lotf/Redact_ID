@@ -1,4 +1,5 @@
 # src/redact_id/settings.py
+import json
 import sys
 from pathlib import Path
 from typing import Optional
@@ -7,7 +8,8 @@ from pydantic import Field, field_validator, ValidationError
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from redact_id.consts import DEFAULT_HOST, DEFAULT_PORT, DEFAULT_RELOAD, DEFAULT_MAX_FILE_SIZE, \
-    DEFAULT_MAX_IMAGE_DIMENSION, DEFAULT_KEEP_RATIO, DEFAULT_BLUR_KERNEL, DEFAULT_BLUR_STRENGTH
+    DEFAULT_MAX_IMAGE_DIMENSION, DEFAULT_KEEP_RATIO, DEFAULT_BLUR_KERNEL, DEFAULT_BLUR_STRENGTH, DEFAULT_CLASS_NAMES, \
+    DEFAULT_FULL_BLUR_CLASSES, DEFAULT_PARTIAL_BLUR_CLASSES
 
 
 class Settings(BaseSettings):
@@ -70,7 +72,43 @@ settings = load_settings_or_die()
 
 
 
+def load_redaction_policy(path: Path | None):
+    if not path:
+        return (
+            DEFAULT_CLASS_NAMES,
+            DEFAULT_FULL_BLUR_CLASSES,
+            DEFAULT_PARTIAL_BLUR_CLASSES,
+        )
 
+    try:
+        with open(path, "r") as f:
+            data = json.load(f)
+    except Exception as e:
+        raise RuntimeError(f"Failed to load redaction policy: {e}")
+
+    if "class_names" not in data:
+        raise ValueError("redaction policy must define 'class_names'")
+
+    class_names = {int(k): v for k, v in data["class_names"].items()}
+
+    full_blur = set(map(int, data.get("full_blur_classes", [])))
+    partial_group = set(map(int, data.get("partial_blur_classes", [])))
+
+    # Safety checks
+    unknown = (full_blur | partial_group) - set(class_names.keys())
+    if unknown:
+        raise ValueError(f"Unknown class IDs in policy: {unknown}")
+
+    overlap = full_blur & partial_group
+    if overlap:
+        raise ValueError(
+            f"Classes cannot be both full and partial blur: {overlap}"
+        )
+    return class_names, full_blur, partial_group
+
+CLASS_NAMES, FULL_BLUR_CLASSES, PARTIAL_BLUR_CLASSES = load_redaction_policy(
+    settings.REDACTION_POLICY_PATH
+)
 
 
 

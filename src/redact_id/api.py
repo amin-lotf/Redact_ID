@@ -21,8 +21,7 @@ from .core import (
     redact_and_encode_async,
     get_blur_type
 )
-from .main import CLASS_NAMES
-from .settings import settings
+from .settings import settings, CLASS_NAMES
 
 logger = logging.getLogger("redact_id")
 

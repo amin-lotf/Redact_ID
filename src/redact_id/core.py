@@ -11,8 +11,7 @@ import numpy as np
 from ultralytics import YOLO
 
 
-from redact_id.main import FULL_BLUR_CLASSES, PARTIAL_BLUR_CLASSES
-from redact_id.settings import settings
+from redact_id.settings import settings, FULL_BLUR_CLASSES, PARTIAL_BLUR_CLASSES
 
 
 # ---------- Data model ----------
@@ -208,7 +207,6 @@ def get_blur_type(
     """
     if det.cls_id in FULL_BLUR_CLASSES:
         return "full"
-
     if det.cls_id not in PARTIAL_BLUR_CLASSES:
         return "unknown"
 
